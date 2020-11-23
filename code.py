@@ -52,3 +52,6 @@ class GaussCode:
                     self.f += 1
 
         self.euler = self.v - self.e + self.f
+
+    def __repr__(self):
+        return f'{self.code}\n{self.signing}\neuler = {self.euler}\n'
