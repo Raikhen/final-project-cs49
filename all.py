@@ -3,14 +3,14 @@ from itertools  import permutations
 from code       import GaussCode
 
 ABC = string.ascii_lowercase
-v = 0
+v = 3
 
 l = [ABC[i] + '+' for i in range(v)] + [ABC[i] + '-' for i in range(v)]
 print(l)
 
 raw = list(permutations(l))
 
-print(raw)
+print(len(raw))
 
 surfaces = {'0': 0, '2': 0, '-2': 0, '-4': 0}
 

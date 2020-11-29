@@ -1,3 +1,4 @@
+from copy           import deepcopy
 from collections    import namedtuple
 
 Dart = namedtuple('Dart', 'index dir')
@@ -22,11 +23,8 @@ class GaussCode:
         self.signing    = signing
         self.e          = len(code)
         self.v          = len(code) // 2
-        self.nums       = [1 if s == '+' else -1 for s in signing]
         self.signed     = not not signing
         self.indexes    = {}
-        self.f          = 0
-        self.orientable = True
 
         for i, l in enumerate(code):
             if l in self.indexes:
@@ -34,24 +32,46 @@ class GaussCode:
             else:
                 self.indexes[l] = [i]
 
-        darts = {}
-        crypt = lambda dart: str(dart.dir * (dart.index + 1))
+        if self.signed:
+            self.nums       = [1 if s == '+' else -1 for s in signing]
+            self.f          = 0
+            self.orientable = True
 
-        for i in range(self.e):
-            for d in [-1, 1]:
-                dart = Dart(i, d)
+            darts = {}
+            crypt = lambda dart: str(dart.dir * (dart.index + 1))
 
-                if not crypt(dart) in darts:
-                    while not crypt(dart) in darts:
-                        darts[crypt(dart)] = self.f
-                        dart = self.flip(self.succ(dart))
+            for i in range(self.e):
+                for d in [-1, 1]:
+                    dart = Dart(i, d)
 
-                    if dart.index != i or dart.dir != d:
-                        self.orientable = False
+                    if not crypt(dart) in darts:
+                        while not crypt(dart) in darts:
+                            darts[crypt(dart)] = self.f
+                            dart = self.flip(self.succ(dart))
 
-                    self.f += 1
+                        if dart.index != i or dart.dir != d:
+                            self.orientable = False
 
-        self.euler = self.v - self.e + self.f
+                        self.f += 1
+
+            self.euler = self.v - self.e + self.f
+
+    def uncrossed(self):
+        s = deepcopy(self.code)
+
+        intersections = list(self.indexes.keys())
+
+        for i in intersections:
+            i_1 = s.index(i) + 1
+            i_2 = s[i_1:].index(i) + i_1
+            s   = s[:i_1] + s[i_1:i_2][::-1] + s[i_2:]
+
+        return s
 
     def __repr__(self):
-        return f'{self.code}\n{self.signing}\neuler = {self.euler}\n'
+        s = self.code
+
+        if self.signed:
+            s += f'\n{self.signing}\neuler = {self.euler}\n'
+
+        return s
