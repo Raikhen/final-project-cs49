@@ -1,4 +1,5 @@
 from code import GaussCode
 
 code = GaussCode('abcabc')
-print(code.uncrossed())
+code.compute_all_signings()
+print(code.euler())

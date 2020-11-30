@@ -46,7 +46,7 @@ def get_endings(code, signing, n):
 def all_codes(n):
     return get_endings('a', '+', n)
 
-codes = all_codes(2)
+codes = all_codes(3)
 
 print(len(codes))
 
@@ -54,10 +54,10 @@ k = 0
 s = set()
 
 for c in codes:
-    if c.euler == 2:
-        print(c)
-        s.add(c.code)
-        k += 1
+    if c.code == 'abcabc':
+        print(c.signing)
+        #s.add(c.code)
+        # k += 1
 
-print(k)
-print(s)
+# print(k)
+# print(s)

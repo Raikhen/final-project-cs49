@@ -68,6 +68,40 @@ class GaussCode:
 
         return s
 
+    def compute_all_signings(self):
+        def chain(n):
+            if n == 0:
+                return ['']
+
+            cs = chain(n - 1)
+            return [f'+{c}' for c in cs] + [f'-{c}' for c in cs]
+
+        signings = []
+
+        for c in chain(self.v):
+            s = ['-'] * self.e
+
+            for i, l in enumerate(self.indexes.keys()):
+                i_1 = self.indexes[l][0]
+                i_2 = self.indexes[l][1]
+
+                if c[i] == '+':
+                    s[i_1] = '+'
+                else:
+                    s[i_2] = '+'
+
+            signings.append(''.join(s))
+
+        self.all = signings
+
+    def euler(self):
+        if self.signed:
+            return self.euler
+
+        self.compute_all_signings()
+
+        return max([GaussCode(self.code, s).euler for s in self.all])
+
     def __repr__(self):
         s = self.code
 
