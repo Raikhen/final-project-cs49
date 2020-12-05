@@ -1,35 +1,63 @@
-import string
-from itertools  import permutations
-from code       import GaussCode
+from code import GaussCode
 
-ABC = string.ascii_lowercase
-v = 3
+def succ(x):
+    if isinstance(x, str):
+        return chr(ord(x) + 1)
 
-l = [ABC[i] + '+' for i in range(v)] + [ABC[i] + '-' for i in range(v)]
-print(l)
+    return x + 1
 
-raw = list(permutations(l))
+def get_indexes(code, signing):
+    n = len(code)
 
-print(len(raw))
+    indexes = {}
 
-surfaces = {'0': 0, '2': 0, '-2': 0, '-4': 0}
+    for i in range(n):
+        if code[i] in indexes:
+            indexes[code[i]].append((signing[i], i))
+        else:
+            indexes[code[i]] = [(signing[i], i)]
 
-for tup in raw:
-    letters = ''.join([s[0] for s in tup])
-    signing = ''.join([s[1] for s in tup])
-    code    = GaussCode(letters, signing)
+    return indexes
 
-    surfaces[str(code.euler)] += 1
+def get_endings(code, signing, n):
+    if len(code) == 2 * n:
+        return [GaussCode(code, signing)]
 
-print(surfaces)
+    endings = []
+    next_options = []
 
-'''
-Without correcting for overcounting:
+    # The old guys missing
+    indexes = get_indexes(code, signing)
+    one_rep = list(filter(lambda l: len(l) == 1, indexes.values()))
 
-0) {'0': 0, '2': 1, '-2': 0, '-4': 0}
-1) {'0': 0, '2': 2, '-2': 0, '-4': 0}
-2) {'0': 8, '2': 16, '-2': 0, '-4': 0}
-3) {'0': 396, '2': 252, '-2': 72, '-4': 0}
-4) {'0': 21216, '2': 6240, '-2': 12864, '-4': 0}
-5) {'0': 1322400, '2': 215520, '-2': 1831680, '-4': 259200}
-'''
+    op = lambda s: '-' if s == '+' else '+'
+    next_options += [(code[e[0][1]], op(e[0][0])) for e in one_rep]
+
+    # The next new guy
+    if len(indexes) != n:
+        new = succ(max(code))
+        next_options += [(new, '+'), (new, '-')]
+
+    for e in next_options:
+        endings += get_endings(code + e[0], signing + e[1], n)
+
+    return endings
+
+def all_codes(n):
+    return get_endings('a', '+', n)
+
+codes = all_codes(2)
+
+print(len(codes))
+
+k = 0
+s = set()
+
+for c in codes:
+    if c.euler == 2:
+        print(c.code, c.signing)
+        s.add(c.code)
+        k += 1
+
+print(k)
+print(s)
