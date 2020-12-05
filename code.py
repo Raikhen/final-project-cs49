@@ -97,6 +97,8 @@ class GaussCode:
     def euler(self):
         if self.signed:
             return self.euler
+        elif self.code == '':
+            return 2
 
         self.compute_all_signings()
 

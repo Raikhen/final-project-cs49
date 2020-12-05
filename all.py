@@ -48,6 +48,7 @@ def all_codes(n):
 
 codes = all_codes(2)
 
+'''
 print(len(codes))
 
 k = 0
@@ -61,3 +62,4 @@ for c in codes:
 
 print(k)
 print(s)
+'''

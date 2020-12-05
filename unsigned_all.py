@@ -41,6 +41,9 @@ def get_endings(code, n):
     return endings
 
 def all_unsigned_codes(n):
-    return get_endings('ab', n)
+    if n == 0:
+        return [GaussCode('')]
+    elif n == 1:
+        return [GaussCode('aa')]
 
-print(all_unsigned_codes(3))
+    return get_endings('ab', n)
