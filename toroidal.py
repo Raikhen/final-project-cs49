@@ -22,14 +22,20 @@ Proper 3-toroidal:
     abacdedbfcfe
 '''
 
-'''
-codes = all_unsigned_codes(2)
-print(codes)
+codes = all_unsigned_codes(7)
+
+best_code = ''
+best_euler = 4
 
 for c in codes:
-    c.compute_all_signings()
-    print(c, c.euler())
-'''
+    euler = c.euler()
+
+    if euler < best_euler:
+        best_code = c
+        best_euler = euler
+        print(best_code, best_euler)
+
+print('Done.')
 
 '''
 Sequence A
@@ -42,10 +48,12 @@ Smallest number of vertices required to be minimally embeddable on genus g:
 4) >6.
 '''
 
+'''
 signed_codes = all_codes(6)
 
 for c in signed_codes:
     print(c)
+'''
 
 '''
 Sequence B
