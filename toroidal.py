@@ -2,13 +2,6 @@ from code           import GaussCode
 from all            import all_codes
 from unsigned_all   import all_unsigned_codes
 
-code = GaussCode('8156237845126734')
-code.compute_all_signings()
-# print(code.euler())
-
-# aijafnebjkbgopihemnofcklchpgdlmd
-# acedbabcde
-
 '''
 Proper toroidal:
     abcabdecde
@@ -22,7 +15,8 @@ Proper 3-toroidal:
     abacdedbfcfe
 '''
 
-codes = all_unsigned_codes(7)
+codes = all_unsigned_codes(4)
+print(len(codes))
 
 best_code = ''
 best_euler = 4
@@ -35,7 +29,7 @@ for c in codes:
         best_euler = euler
         print(best_code, best_euler)
 
-print('Done.')
+print('Done.\n')
 
 '''
 Sequence A
@@ -45,15 +39,20 @@ Smallest number of vertices required to be minimally embeddable on genus g:
 1) 2, with 'abab'.
 2) 5, with 'ababcdcede'.
 3) 6, with 'abacdedbfcfe'.
-4) >6.
+4) >7.
 '''
 
-'''
-signed_codes = all_codes(6)
+codes = all_codes(4)
+print(len(codes))
 
-for c in signed_codes:
-    print(c)
-'''
+best_code = ''
+best_euler = 4
+
+for c in codes:
+    if c.euler < best_euler:
+        best_code = c
+        best_euler = c.euler
+        print(best_code)
 
 '''
 Sequence B
@@ -63,7 +62,7 @@ Smallest number of vertices with signing required to be min. emb. on genus g:
 1) 2, with ('abab', '++--')
 2) 3, with ('abacbc', '++---+')
 3) 5, with ('ababcdeced', '++--+++---')
-4) >6.
+4) 7, with ('ababcdcdefegfg', '++--++--++---+').
 '''
 
 # Clearly, we have that sequence A is stricly greater than sequence B.
