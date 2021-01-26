@@ -105,9 +105,9 @@ class GaussCode:
         return max([GaussCode(self.code, s).euler for s in self.all])
 
     def __repr__(self):
-        s = self.code
+        s = str(self.code)
 
         if self.signed:
-            s += f'\n{self.signing}\neuler = {self.euler}\n'
+            s += f'\n{str(self.signing)}\neuler = {self.euler}\n'
 
         return s
